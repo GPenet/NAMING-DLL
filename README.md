@@ -50,98 +50,32 @@ This DLL has a very limited number of entries with a double target
 
 The user has only to know the properties of the DLL itself
 The user code to process files is very simple.
-A small progam is added to do the main file transformations used in my datbases. 
 
+A small progam is added to do the main file transformations used in my datbases. 
 This program uses the file u09names_user.h where the content of the DLL appears as comment.
+
 The DLL requires (needed in called DLLs) a computer using a 64 bits intel set of instructions 
 
+The code of the DLL is given to explain how it works.
+================================================== main uses of the repository
 
+A============================= DLL
 
+to work with the DLL the user has to download 
+all DLLs 
+sk9names.lib 
+u09names_user.h to use it in a C or C++ program.
 
-the package functions are using my "standard" frame and have usually one entry file, one output file and a possible redirection of "cout" where can be seen a short message if the process fails.
+If the coding is not C or C++ the user must have similar calling possibilities in his code.
 
-As this is mainly for steps in a wider process, the entry file must fit with the process called and the process stops in case of anomaly seen.
+B=========================== small .exe
 
-The command line will have some common parameters for all functions as in this line
+If the user is working under windows, he can use directly the small program sku06D_names.exe
+The coding of the command line is available in the file sku06D_names_readme.txt
+Again, all DLLs are needed.
 
-sku06_names -c5 -v4-2 -i_tmissingsp_rat.txt -o_tmo2 >_tmo2.txt "skfred to p er r b"
+here again, the source is available compiled using virtual studio
 
-sku06_names for theprogram sku06_names.exe
+All functions of this program are processing a text file containing sudoku or names 
+and create an output with ED sudokus and/or names
 
--cn where n is the function id
-
--v4-p an optional parameter (default 0) needed in some functions
-
--ixxx where xxx is the file name here _tmissingsp_rat.txt
-
--oyyyy thhe root file name for output;
-
-mostoften the output will be yyy_file1.txt (only one file in output)
-
-but in one process, a second output file yyy_file2.txt can be delivered
-
-zzz redirection for the "cout" file
-
-================================================================== function -c0
-
-entry any valid puzzle
-
-The process is cancelled if a wrong puzzle is seen
-
-To limit the risk of an endless brute force, a minimum of 17 clues is required, but the caller should take care not to send puzzles with plenty of solutions.
-
-standard output name in fix format "rrrrrrrrrr bbbbbbbbbbbbbb" length 10+1+14=25
-
--v4-n is an output request for a second file
-
-puzzle in canonical morph;rank;bitfield
-
-=========================
-
-function -c1
-
-This is a variant of the process C4 optimal when the entry file is sorted on the solution grid rank. Here the solution grid is searche only once per rank. As this is the longest part of the process, the runtime cal fall down sharply.
-
-============================================================== function -c2
-
-convert rank + bit field to 19 bytes
-
-entry file must be 10+1+14 or rank;bitfield
-
-out file is name19 and name 19;entry and if -v4-n is in the command line
-
-============================================================== function -c3
-
-convert name 19 bytes to rank plus bit field
-
-as for the process 3, this is a "test code" with an entry file of names 19 and an output having the rank+bitf followed bay the entry.
-
-the standard output is 10+1+14
-
-the output is rank;bitf if -v4-n is in the command line
-
-=================================================================
-
-function -c4
-
-this process delivers the puzzle in min lex morphfor a given name 10+1+14 or rank;bitf.
-
-Some runtime can be saved using the output puz;rank;name in the process -c1. In the vicinity search, names are used to clear redundancy, then new puzzles are rated. One problem is that SKFR loose the name linked to the puzzle, so another way (data base) must be used to match the records.
-
-function -c4 is relatively expensive, but can go back from the name to the puzzle.
-
-==================================================================
-
-function -c5
-
-this is a tailor made function to go from skfr output (assumed to be done using a canonical puzzle) to the record to save. here a typical output of skfr and the expected output .....67.....18.26.....27.412.4.......9...8...831.7......6.4287......1....4..6..12 ED=11.0/8.4/2.6 .....67.....18.26.....27.412.4.......9...8...831.7......6.4287......1....4..6..12;110;5411131853;W1Rmk0Yu2q34I6
-
-110 is for 11.0
-
-then comes the rank and the name.
-
-================= function c6 not really naming, but variant of c5 for skfr output without the need of the solution grid rank (can be not min lexical puzzle) -v4- gives the max ER to select (45 to 119, default 100)
-
-================= function c7
-
-forcing a rank;bitfield to a 10+1+14 toutput.
